@@ -17,7 +17,7 @@ exports.create = async (req, res) => {
 
 exports.findAll = async (req, res) => {
   try {
-    const purchases = await Purchase.findAll({ include: ['Product', 'User'] });
+    const purchases = await Purchase.findAll({ include: ['Product'] });
     res.status(200).json(purchases);
   } catch (error) {
     throw new Error(error.message);
@@ -26,7 +26,7 @@ exports.findAll = async (req, res) => {
 
 exports.findOne = async (req, res) => {
   try {
-    const purchase = await Purchase.findByPk(req.params.id, { include: ['Product', 'User'] });
+    const purchase = await Purchase.findByPk(req.params.id, { include: ['Product'] });
     if (purchase) {
       res.status(200).json(purchase);
     } else {
@@ -50,7 +50,7 @@ exports.update = async (req, res) => {
       where: { id: req.params.id },
     });
     if (updated) {
-      const updatedPurchase = await Purchase.findByPk(req.params.id, { include: ['Product', 'User'] });
+      const updatedPurchase = await Purchase.findByPk(req.params.id, { include: ['Product'] });
       res.status(200).json(updatedPurchase);
     } else {
       res.status(404).json({ error: 'Purchase not found' });

@@ -11,7 +11,7 @@ exports.create = async (req, res) => {
 
 exports.findAll = async (req, res) => {
   try {
-    const stockMovements = await StockMovement.findAll({ include: ['Product', 'User'] });
+    const stockMovements = await StockMovement.findAll({ include: ['Product'] });
     res.status(200).json(stockMovements);
   } catch (error) {
     throw new Error(error.message);
@@ -20,7 +20,7 @@ exports.findAll = async (req, res) => {
 
 exports.findOne = async (req, res) => {
   try {
-    const stockMovement = await StockMovement.findByPk(req.params.id, { include: ['Product', 'User'] });
+    const stockMovement = await StockMovement.findByPk(req.params.id, { include: ['Product'] });
     if (stockMovement) {
       res.status(200).json(stockMovement);
     } else {
@@ -37,7 +37,7 @@ exports.update = async (req, res) => {
       where: { id: req.params.id },
     });
     if (updated) {
-      const updatedStockMovement = await StockMovement.findByPk(req.params.id, { include: ['Product', 'User'] });
+      const updatedStockMovement = await StockMovement.findByPk(req.params.id, { include: ['Product'] });
       res.status(200).json(updatedStockMovement);
     } else {
       res.status(404).json({ error: 'StockMovement not found' });

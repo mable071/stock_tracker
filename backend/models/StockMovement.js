@@ -29,14 +29,14 @@ const StockMovement = sequelize.define('StockMovement', {
     type: DataTypes.TEXT,
     allowNull: true,
   },
-  performed_by: {
-    type: DataTypes.UUID,
-    references: {
-      model: User,
-      key: 'id',
-    },
-    allowNull: false,
-  },
+  // performed_by: {
+  //   type: DataTypes.UUID,
+  //   references: {
+  //     model: User,
+  //     key: 'id',
+  //   },
+  //   allowNull: true,
+  // },
 }, {
   timestamps: true,
   createdAt: 'timestamp',
@@ -44,8 +44,8 @@ const StockMovement = sequelize.define('StockMovement', {
 });
 
 StockMovement.belongsTo(Product, { foreignKey: 'product_id' });
-StockMovement.belongsTo(User, { foreignKey: 'performed_by' });
+// StockMovement.belongsTo(User, { foreignKey: 'performed_by' });
 Product.hasMany(StockMovement, { foreignKey: 'product_id' });
-User.hasMany(StockMovement, { foreignKey: 'performed_by' });
+// User.hasMany(StockMovement, { foreignKey: 'performed_by' });
 
 module.exports = StockMovement;

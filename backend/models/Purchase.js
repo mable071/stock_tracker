@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 const Product = require('./Product');
-const User = require('./User');
+const Supplier = require('./Supplier');
 
 const Purchase = sequelize.define('Purchase', {
   id: {
@@ -11,11 +11,11 @@ const Purchase = sequelize.define('Purchase', {
   },
   product_id: {
     type: DataTypes.UUID,
-    references: {
-      model: Product,
-      key: 'id',
-    },
     allowNull: false,
+  },
+  supplier_id: {
+    type: DataTypes.UUID,
+    allowNull: true,
   },
   quantity_received: {
     type: DataTypes.INTEGER,
@@ -27,36 +27,22 @@ const Purchase = sequelize.define('Purchase', {
   },
   total_cost: {
     type: DataTypes.DECIMAL(10, 2),
-    allowNull: false,
     get() {
-      return (this.quantity_received * this.cost_per_unit).toFixed(2);
+      const quantity = this.getDataValue('quantity_received');
+      const cost = this.getDataValue('cost_per_unit');
+      return quantity && cost ? (quantity * cost).toFixed(2) : null;
     },
-  },
-  purchased_by: {
-    type: DataTypes.UUID,
-    references: {
-      model: User,
-      key: 'id',
-    },
-    allowNull: false,
-  },
-  supplier_name: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  invoice_number: {
-    type: DataTypes.STRING,
-    allowNull: false,
   },
 }, {
   timestamps: true,
-  createdAt: 'timestamp',
+  createdAt: 'created_at',
   updatedAt: false,
 });
 
+// Associations
 Purchase.belongsTo(Product, { foreignKey: 'product_id' });
-Purchase.belongsTo(User, { foreignKey: 'purchased_by' });
+Purchase.belongsTo(Supplier, { foreignKey: 'supplier_id' });
 Product.hasMany(Purchase, { foreignKey: 'product_id' });
-User.hasMany(Purchase, { foreignKey: 'purchased_by' });
+Supplier.hasMany(Purchase, { foreignKey: 'supplier_id' });
 
 module.exports = Purchase;

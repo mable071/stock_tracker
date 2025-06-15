@@ -17,7 +17,7 @@ exports.create = async (req, res) => {
 
 exports.findAll = async (req, res) => {
   try {
-    const sales = await Sale.findAll({ include: ['Product', 'User'] });
+    const sales = await Sale.findAll({ include: ['Product'] });
     res.status(200).json(sales);
   } catch (error) {
     throw new Error(error.message);
@@ -26,7 +26,7 @@ exports.findAll = async (req, res) => {
 
 exports.findOne = async (req, res) => {
   try {
-    const sale = await Sale.findByPk(req.params.id, { include: ['Product', 'User'] });
+    const sale = await Sale.findByPk(req.params.id, { include: ['Product'] });
     if (sale) {
       res.status(200).json(sale);
     } else {
@@ -50,7 +50,7 @@ exports.update = async (req, res) => {
       where: { id: req.params.id },
     });
     if (updated) {
-      const updatedSale = await Sale.findByPk(req.params.id, { include: ['Product', 'User'] });
+      const updatedSale = await Sale.findByPk(req.params.id, { include: ['Product'] });
       res.status(200).json(updatedSale);
     } else {
       res.status(404).json({ error: 'Sale not found' });

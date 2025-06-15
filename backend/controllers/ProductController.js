@@ -2,7 +2,9 @@ const Product  = require('../models/Product');
 
 exports.create = async (req, res) => {
   try {
+    console.log(req.body);
     const product = await Product.create(req.body);
+    
     res.status(201).json(product);
   } catch (error) {
     throw new Error(error.message);
